@@ -15,11 +15,11 @@ enum class CircuitState {
 
 // 熔断器配置
 struct CircuitBreakerConfig {
-    int failure_threshold = 5;           // 失败阈值
-    int success_threshold = 3;           // 半开状态下的成功阈值
+    int failure_threshold = 5;           // 失败次数阈值
+    int success_threshold = 3;           // 半开状态成功次数阈值
     std::chrono::milliseconds timeout = std::chrono::milliseconds(60000); // 熔断超时时间
     std::chrono::milliseconds half_open_timeout = std::chrono::milliseconds(30000); // 半开超时时间
-    double failure_rate_threshold = 0.5; // 失败率阈值
+    double failure_rate_threshold = 0.5; // 失败率阈值（50%）
     int min_request_count = 10;          // 最小请求数量（用于计算失败率）
 };
 
@@ -31,7 +31,7 @@ struct CircuitBreakerStats {
     int rejected_requests = 0;
     std::chrono::steady_clock::time_point last_failure_time;
     std::chrono::steady_clock::time_point last_success_time;
-    double current_failure_rate = 0.0;
+    double current_failure_rate = 0.0;  // failed_requests / total_requests
 };
 
 // 熔断器类
